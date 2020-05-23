@@ -4,7 +4,7 @@
     <div class="main-section">
       <div :class="{ 'loader': loading }"></div>
       <AddTask @add:task="addTask"/>
-      <Tasks :tasks="tasks" @delete:task="deleteTask"/>
+      <Tasks :tasks="tasks" @delete:task="deleteTask" @update:task="updateTask" />
     </div>
   </div>
 </template>
@@ -71,6 +71,24 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+    async updateTask(id, updatedTask) {
+      this.loading = true
+      try {
+        const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(updatedTask),
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        })
+        const data = await response.json()
+        this.tasks = this.tasks.map(
+          task => task.id === id ? data : task
+        )
+        this.loading = false
+      }
+      catch (error) {
+        console.error(error)
+      }
     }
   }
 }
@@ -121,5 +139,15 @@ body {
   background: url('../public/loader.gif') 50% 50% no-repeat rgb(249,249,249);
   background-size: 50px;
   opacity: 0.5;
+}
+
+.form-control {
+  display: inline-block;
+  padding: 10px 2px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: auto;
 }
 </style>

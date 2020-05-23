@@ -49,13 +49,6 @@ export default {
 }
 
 .form-control {
-  display: inline-block;
-  padding: 10px 2px;
-  font-size: 14px;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin: auto;
   margin-bottom: 10px;
 }
 

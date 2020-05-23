@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <Tasks :title="title" :tasks="tasks"/>
+    <div :class="{ 'loader': loading }"></div>
+    <Tasks :title="title" :tasks="tasks" @delete:task="deleteTask"/>
   </div>
 </template>
 
@@ -15,6 +16,7 @@ export default {
   data: function() {
     return {
       title: 'Tasks for the day',
+      loading: false,
       tasks:[],
     }
   },
@@ -33,6 +35,21 @@ export default {
       catch (error) {
           console.error(error)
       }
+    },
+    async deleteTask(id) {
+      this.loading = true
+      try {
+        await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+          method: "DELETE"
+        })
+        this.tasks = this.tasks.filter(
+          task => task.id !== id
+        )
+        this.loading = false
+      }
+      catch (error) {
+        console.error(error);
+      }
     }
   }
 }
@@ -45,11 +62,38 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   max-width: 450px;
   margin: 2rem auto;
-  padding: 0 1rem;
-  color: #fff;
+  color: #222;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: .5rem;
 }
 
 body {
   background: #32475f;
+}
+
+button {
+  cursor: pointer;
+  background: #888181;
+  color: #fff;
+  border: 2px solid #888181;
+  margin: 0 .5rem;
+}
+
+.form-control, button {
+  display: inline-block;
+  -webkit-appearance: none;
+  padding: .5rem 1rem;
+  border-radius: 4px;
+}
+
+.loader{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: url('../public/loader.gif') 50% 50% no-repeat rgb(249,249,249);
+  opacity: 0.5;
 }
 </style>

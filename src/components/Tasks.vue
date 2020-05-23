@@ -3,8 +3,11 @@
         <h1>{{ title }}</h1>
         <ul>
           <li v-for="task in tasks" :key="task.id">
-            <input type="checkbox">
-            <span>{{ task.title }}</span>
+            <input type="checkbox" @click="updateTaskStatus(task)" :checked="task.completed">
+            <span :class="{ 'is-completed': task.completed }">{{ task.title }}</span>
+            <button class="btn-danger" @click="$emit('delete:task', task.id)">
+              Delete
+            </button>
           </li>
         </ul>
     </div>
@@ -15,12 +18,21 @@ export default {
     name:"Tasks",
     props: {
         title: String,
-        tasks: Array,
+        tasks: Array
+    },
+    methods: {
+        updateTaskStatus: function (task) {
+            task.completed = !task.completed
+        }
     }
 }
 </script>
 
 <style scoped>
+h1 {
+  margin: 10px;
+}
+
 ul {
   padding: 0;
 }
@@ -30,8 +42,6 @@ li {
   align-items: center;
   padding: 1rem;
   margin-bottom: 1rem;
-  background: #f4f4f4;
-  border-radius: .5rem;
   color: #222;
 }
 
@@ -45,5 +55,15 @@ li span {
 
 [type="checkbox"] {
   margin-right: 1rem;
+}
+
+.is-completed {
+  text-decoration: line-through;
+  color: #ccc;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: 2px solid #dc3545;
 }
 </style>

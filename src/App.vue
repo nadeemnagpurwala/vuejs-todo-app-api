@@ -1,17 +1,39 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Tasks :title="title" :tasks="tasks"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Tasks from './components/Tasks.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Tasks
+  },
+  data: function() {
+    return {
+      title: 'Tasks for the day',
+      tasks:[],
+    }
+  },
+  mounted() {
+    this.getTasks()
+  },
+  methods: {
+    async getTasks() {
+      try {
+          const response = await fetch(
+            'https://jsonplaceholder.typicode.com/todos?_limit=5'
+          )
+          const data = await response.json()
+          this.tasks = data
+        }
+      catch (error) {
+          console.error(error)
+      }
+    }
   }
 }
 </script>
@@ -21,8 +43,13 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  max-width: 450px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #fff;
+}
+
+body {
+  background: #32475f;
 }
 </style>

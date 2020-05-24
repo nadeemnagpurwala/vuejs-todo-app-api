@@ -85,11 +85,11 @@ export default {
           body: JSON.stringify(updatedTask),
           headers: { 'Content-type': 'application/json; charset=UTF-8' },
         })
+        this.loading = false
         const data = await response.json()
         this.tasks = this.tasks.map(
           task => task.id === id ? data : task
         )
-        this.loading = false
       }
       catch (error) {
         console.error(error)

@@ -24,6 +24,7 @@ export default {
       title: 'Todo List App',
       loading: false,
       tasks:[],
+      lastId: ''
     }
   },
   mounted() {
@@ -66,8 +67,12 @@ export default {
           headers: { 'Content-type': 'application/json; charset=UTF-8' },
         })
         const data = await response.json()
+        if (this.lastId) {
+          data.id = this.lastId + 1
+        }
         this.tasks = [...this.tasks, data]
         this.loading = false
+        this.lastId = data.id;
       } catch (error) {
         console.error(error)
       }
